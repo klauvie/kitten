@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kočičí Věštírna</title>
+    <title>Kočičí Myšlenkotrap</title>
     <style>
         * {
             margin: 0;
@@ -122,6 +122,48 @@
             box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .game-container {
+            min-height: 120px;
+        }
+
+        .game-input-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        #guessInput {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 3px solid #FF6633;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 400px;
+            background: white;
+            color: #2C2C2C;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        #guessInput:focus {
+            outline: none;
+            border-color: #FF9966;
+            box-shadow: 0 0 10px rgba(255, 102, 51, 0.3);
+            background: #FFFACD;
+        }
+
+        #guessInput::placeholder {
+            color: #999;
+        }
+
+        .game-stats {
+            text-align: center;
+            color: #FF6633;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 15px 0;
+        }
+
         .fortune-text {
             color: #2C2C2C;
             font-size: 1.3em;
@@ -216,93 +258,145 @@
         <div class="paw-print paw2">🐾</div>
 
         <div class="header">
-            <h1>🐱 Kočičí Věštírna 🐱</h1>
-            <p class="subtitle">Klikni na kočku a objeví se věštba!</p>
+            <h1>🐱 Kočičí Myšlenkotrap 🐱</h1>
+            <p class="subtitle">Kočka si myslí věc - můžeš ji uhodnout?</p>
         </div>
 
-        <div class="cat-face-container" onclick="getFortune()">
+        <div class="cat-face-container">
             🐱
         </div>
 
-        <div class="fortune-box">
-            <div class="fortune-text initial-text" id="fortune">
-                Zmáčkni tlačítko a nechej kočku ti prozradit budoucnost...
+        <div class="fortune-box game-container">
+            <div class="fortune-text" id="fortune">
+                Kočka si myslí na něco... Začni hádat! 🤔
             </div>
         </div>
 
+        <div class="game-input-container">
+            <input 
+                type="text" 
+                id="guessInput" 
+                placeholder="Napiš své hádání..." 
+                onkeypress="if(event.key === 'Enter') makeGuess()"
+                autocomplete="off"
+            />
+        </div>
+
+        <div class="game-stats">
+            <span id="attempts">Pokusů: 0</span>
+        </div>
+
         <div class="button-container">
-            <button class="button-reset" onclick="resetFortune()">Vymazat ✕</button>
+            <button onclick="makeGuess()">Hádat! 🎯</button>
+            <button class="button-reset" onclick="startNewGame()">Nová hra ↻</button>
         </div>
     </div>
 
     <script>
-        const fortunes = [
-            "Budoucnost ti ukáže, že nejlepší chvíle jsou ty, které se zdají být nepatrné. Poslouš jen svoje srdce.",
-            "Věštím ti: na konci cesty, kterou nyní jdeš, čeká něco, co zatím ani nevíš, že toužíš.",
-            "Hvězdy mlčí, ale jejich ticho ti povídá, že změna je nezbytná součástí tvého osudu.",
-            "V budoucnosti zjistíš, že největší bitvy nejsou s ostatními, ale s sebou samým.",
-            "Věštba šeptá: ten, kdo se bojíš být, se tím jednoho dne stanoveš.",
-            "Čeká tě dlouhá cesta, ale každý krok ji učiní kratší. Věř.",
-            "Příští kapitola tvého života bude napsána tvýma rukama. Drž si pero hluboko.",
-            "Vidím v tvé budoucnosti čekání a pak... náhlou jasnost, která ti změní vše.",
-            "Věštím: loupežníci času se ti budou posmívat, ale vítězství je na tvé straně.",
-            "Budoucnost ti přinese otázky, na které musíš sám najít odpovědi v hlubinách své duše.",
-            "V kristalech času vidím: tvá cesta není rovná, ale právě v zatáčkách se skrývá zlato.",
-            "Věštba zní: nikdy nebudeš tím, kdo býval. To není tragédie, to je dar.",
-            "V daleké budoucnosti si uvědomíš, že všechny překážky byly vlastně mostky.",
-            "Hvězdy prozrazují: ten, kdo se nebojí být sám, nikdy nebude sám.",
-            "Čeká tě doba, kdy pochopíš, že nejdůležitější věci nelze vidět ani kousat.",
-            "Věštím ti hlubokou pravdu: budoucnost není určena osudem, jen vytvářena tebou.",
-            "Příští kapitola bude napsána láskou a smrtelností, ne strachem.",
-            "Vidím v tě sílu, kterou sám neznáš. Čekej na správný čas.",
-            "Věštba šeptá: všechny hvězdy se jednou setkají v jednom bodě... tvém.",
-            "Budoucnost ti nabídne volbu mezi bezpečím a smyslem. Vyber si rozumně.",
-            "V čase, který přijde, budeš vděčný za to, co dnes musíš ztratit.",
-            "Věštím: tvůj osud a tvoje svoboda nejsou rozpory, jsou jeden tanec.",
-            "Halucinace v magické kouli ukazuje: ta verze tebe, kterou myslíš že jsi, je jen tín reality.",
-            "Budoucnost zní jako ticho, ale to ticho je plné života a vesmírného tikání.",
-            "Věštba mumlá: každý, kdo prošel tvou cestou, ti zanechal dar. Rozpoznáš jej.",
-            "Vidím dálku, kde se setkají tvoje sny a realita. Tam je tvůj pravý domov.",
-            "Věštím ti: nejsilnější věc v tebe není řeč, ale absence slov.",
-            "Příští tisíciletí přinese odpovědi na otázky, které si ani neuvědomuješ.",
-            "V budoucnosti uzříš, že bolest byla jen tvůj nejlepší učitel.",
-            "Věštba říká: ten, kdo se bojíš být, již máš v sobě schovaného.",
-            "Čeká tě dlouhá noc, ale hvězdy budou věrnější než kdy dříve.",
-            "Věštím: ztracené bude znovu nalezeno a nalezené bude ještě dražší.",
-            "Věštba šeptá: tvoje budoucnost je psaná neviditelným inkoustem lásky.",
-            "Budoucnost ti povídá, že pravý dar je v tom, co nikdy nedostaneš.",
-            "Věštba mumlá: všichni, které potkáš, jsou tvými učiteli. Poslouš je.",
-            "V čase, který přijde, bude každý den volbou - začít znova.",
-            "Věštím ti nejhluběji: ty jsi už doma, jen to ještě nevíš.",
-            "Budoucnost skrývá tajemství, které tě změní navždy.",
-            "Hvězdy říkají: všechno, co děláš dnes, tě učí, jak být zítřícího dne.",
-            "Věštba prozrazuje: tvůj osud čeká na tvé rozhodnutí, ne na náhodu."
+        // Seznam věcí, na které si kočka myslí
+        const things = [
+            { word: "myš", category: "zvíře", similar: ["hlodavec", "potkan", "krysa"], hint: "💡 Kočka mě často lovi..." },
+            { word: "pták", category: "zvíře", similar: ["peří", "křídla", "létat"], hint: "💡 Létám a zpívám..." },
+            { word: "ryba", category: "zvíře", similar: ["voda", "ploutve", "šupiny"], hint: "💡 Bydlím ve vodě..." },
+            { word: "slunce", category: "příroda", similar: ["hvězda", "teplo", "světlo"], hint: "💡 Září na obloze v noci... ne, počkej, přes den!" },
+            { word: "měsíc", category: "příroda", similar: ["hvězda", "noc", "svit"], hint: "💡 Když kočky vyje na noc..." },
+            { word: "tráva", category: "příroda", similar: ["zelená", "zahrada", "louka"], hint: "💡 Rostě na zemi a je zelená..." },
+            { word: "strom", category: "příroda", similar: ["dřevo", "listy", "les"], hint: "💡 Mám kmen a listy... Kočka se na mě ráda leze!" },
+            { word: "voda", category: "příroda", similar: ["tekutina", "moře", "pití"], hint: "💡 Tekutá, čirá, všude kolem nás..." },
+            { word: "oheň", category: "příroda", similar: ["teplý", "nebezpečný", "plameny"], hint: "💡 Hřeješ a rozsvěcuješ, ale nesmíš se mě dotknout!" },
+            { word: "snění", category: "pojem", similar: ["představa", "fantasy", "noční"], hint: "💡 Mám to každou noc, když spím..." },
+            { word: "hraní", category: "činnost", similar: ["zábava", "hra", "veselí"], hint: "💡 Nejraději to dělám s přáteli..." },
+            { word: "spaní", category: "činnost", similar: ["odpočinek", "postel", "noc"], hint: "💡 Kočky to milují 16 hodin denně..." },
+            { word: "jídlo", category: "věc", similar: ["jíst", "chutné", "hlad"], hint: "💡 Bez toho bys neměl energii..." },
+            { word: "postel", category: "věc", similar: ["spaní", "pohodlí", "nábytek"], hint: "💡 Místo kde se spí... a odpočívá..." },
+            { word: "hračka", category: "věc", similar: ["hraní", "zábava", "hrát"], hint: "💡 S tím si dítko pohraje..." },
+            { word: "kniha", category: "věc", similar: ["čtení", "papír", "příběh"], hint: "💡 Má stránky plné slov a příběhů..." },
+            { word: "barva", category: "pojem", similar: ["zbarvit", "odstín", "spektrum"], hint: "💡 Červená, modrá, zelená... všechno kolem vidíš v..." },
+            { word: "zvuk", category: "pojem", similar: ["slyšet", "hluk", "hudba"], hint: "💡 Slyšíš mě přes uši..." },
+            { word: "láska", category: "pojem", similar: ["cítit", "srdce", "pocit"], hint: "💡 Cítíš ji v srdci, když se máš rád..." },
+            { word: "strach", category: "pojem", similar: ["nebezpečí", "obava", "hrůza"], hint: "💡 Cítíš to, když se bojíš..." }
         ];
 
-        function getFortune() {
+        let currentThing = null;
+        let attempts = 0;
+        let gameWon = false;
+
+        function startNewGame() {
+            // Vyber náhodnou věc
+            currentThing = things[Math.floor(Math.random() * things.length)];
+            attempts = 0;
+            gameWon = false;
+            document.getElementById('guessInput').value = '';
+            document.getElementById('guessInput').disabled = false;
+            document.getElementById('fortune').textContent = 'Kočka si myslí na něco... Začni hádat! 🤔';
+            document.getElementById('attempts').textContent = 'Pokusů: 0';
+        }
+
+        function levenshteinDistance(str1, str2) {
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const matrix = Array(len2 + 1).fill(null).map(() => Array(len1 + 1).fill(0));
+
+            for (let i = 0; i <= len1; i++) matrix[0][i] = i;
+            for (let j = 0; j <= len2; j++) matrix[j][0] = j;
+
+            for (let j = 1; j <= len2; j++) {
+                for (let i = 1; i <= len1; i++) {
+                    const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                    matrix[j][i] = Math.min(
+                        matrix[j][i - 1] + 1,
+                        matrix[j - 1][i] + 1,
+                        matrix[j - 1][i - 1] + indicator
+                    );
+                }
+            }
+            return matrix[len2][len1];
+        }
+
+        function makeGuess() {
+            if (gameWon) return;
+
+            const input = document.getElementById('guessInput').value.trim().toLowerCase();
+            if (!input) return;
+
+            attempts++;
             const fortuneElement = document.getElementById('fortune');
-            fortuneElement.classList.add('loading');
-            fortuneElement.textContent = '🐾 Věštiči se zamýšlí... 🐾';
+            const target = currentThing.word.toLowerCase();
 
-            setTimeout(() => {
-                const randomIndex = Math.floor(Math.random() * fortunes.length);
-                fortuneElement.textContent = fortunes[randomIndex];
-                fortuneElement.classList.remove('loading');
-            }, 1500);
+            // Přesná shoda
+            if (input === target) {
+                gameWon = true;
+                fortuneElement.textContent = `🎉 SPRÁVNĚ! Měla jsem na mysli "${currentThing.word}"! Gratuluji ti! 🐱`;
+                document.getElementById('guessInput').disabled = true;
+                document.getElementById('attempts').textContent = `Pokusů: ${attempts} - Vítězství!`;
+                return;
+            }
+
+            // Kontrola podobných slov
+            if (currentThing.similar.includes(input)) {
+                fortuneElement.textContent = `⭐ Blízko! Myslíš na něco podobného, ale to to není... 🤔`;
+                document.getElementById('guessInput').value = '';
+                document.getElementById('attempts').textContent = `Pokusů: ${attempts}`;
+                return;
+            }
+
+            // Levenshteinova vzdálenost pro podobnost
+            const distance = levenshteinDistance(input, target);
+            if (distance <= 2) {
+                fortuneElement.textContent = `✨ Velmi blízko! Jsi na správné cestě! 🐾`;
+                document.getElementById('guessInput').value = '';
+                document.getElementById('attempts').textContent = `Pokusů: ${attempts}`;
+                return;
+            }
+
+            // Špatně - zobraz nápovědu
+            fortuneElement.innerHTML = `❌ Ne, to není správně! Zkus znovu! 😸<br/><span style="font-size: 0.9em; color: #FF6633; margin-top: 10px; display: block;">${currentThing.hint}</span>`;
+            document.getElementById('guessInput').value = '';
+            document.getElementById('attempts').textContent = `Pokusů: ${attempts}`;
         }
 
-        function resetFortune() {
-            document.getElementById('fortune').textContent = 
-                'Zmáčkni tlačítko a nechej kočku ti prozradit budoucnost...';
-            document.getElementById('fortune').classList.add('initial-text');
-        }
-
-        // Automatické ověřování věštby při prvním načtení
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                // Stránka je připravena
-            }, 100);
-        });
+        // Spusti novou hru při načtení
+        window.addEventListener('load', startNewGame);
     </script>
 </body>
 </html>

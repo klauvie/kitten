@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kočičí Věštírna</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #FFF8DC 0%, #FF8C42 50%, #2C2C2C 100%);
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            background: linear-gradient(to bottom, 
+                #FFFFFF 0%, 
+                #FF9966 35%, 
+                #FF6633 50%, 
+                #000000 85%, 
+                #333333 100%);
+            border-radius: 50px;
+            padding: 60px 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 8px solid #FF6633;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 20%;
+            width: 30px;
+            height: 30px;
+            background: #FF9966;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: 20%;
+            width: 35px;
+            height: 35px;
+            background: #000;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: #2C2C2C;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.3);
+            font-style: italic;
+        }
+
+        .subtitle {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .cat-face-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            cursor: pointer;
+            font-size: 150px;
+            line-height: 150px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .cat-face-container:hover {
+            transform: scale(1.1);
+        }
+
+        .cat-face-container:active {
+            transform: scale(0.95);
+        }
+
+        .fortune-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .fortune-text {
+            color: #2C2C2C;
+            font-size: 1.3em;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FF6633, #FF9966);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #FF9966, #FFAA77);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .button-reset {
+            background: linear-gradient(135deg, #2C2C2C, #555);
+        }
+
+        .button-reset:hover {
+            background: linear-gradient(135deg, #555, #777);
+        }
+
+        .paw-print {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 4em;
+            pointer-events: none;
+        }
+
+        .paw1 { top: 20px; right: 30px; }
+        .paw2 { bottom: 30px; left: 20px; }
+
+        .loading {
+            display: inline-block;
+            animation: spin 1s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .initial-text {
+            color: #999;
+        }
+
+        .magic-orb-container {
+            display: none;
+        }
+
+        .magic-orb {
+            display: none;
+        }
+
+        .orb-glow {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="paw-print paw1">🐾</div>
+        <div class="paw-print paw2">🐾</div>
+
+        <div class="header">
+            <h1>🐱 Kočičí Věštírna 🐱</h1>
+            <p class="subtitle">Klikni na kočku a objeví se věštba!</p>
+        </div>
+
+        <div class="cat-face-container" onclick="getFortune()">
+            🐱
+        </div>
+
+        <div class="fortune-box">
+            <div class="fortune-text initial-text" id="fortune">
+                Zmáčkni tlačítko a nechej kočku ti prozradit budoucnost...
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="button-reset" onclick="resetFortune()">Vymazat ✕</button>
+        </div>
+    </div>
+
+    <script>
+        const fortunes = [
+            "Budoucnost ti ukáže, že nejlepší chvíle jsou ty, které se zdají být nepatrné. Poslouš jen svoje srdce.",
+            "Věštím ti: na konci cesty, kterou nyní jdeš, čeká něco, co zatím ani nevíš, že toužíš.",
+            "Hvězdy mlčí, ale jejich ticho ti povídá, že změna je nezbytná součástí tvého osudu.",
+            "V budoucnosti zjistíš, že největší bitvy nejsou s ostatními, ale s sebou samým.",
+            "Věštba šeptá: ten, kdo se bojíš být, se tím jednoho dne stanoveš.",
+            "Čeká tě dlouhá cesta, ale každý krok ji učiní kratší. Věř.",
+            "Příští kapitola tvého života bude napsána tvýma rukama. Drž si pero hluboko.",
+            "Vidím v tvé budoucnosti čekání a pak... náhlou jasnost, která ti změní vše.",
+            "Věštím: loupežníci času se ti budou posmívat, ale vítězství je na tvé straně.",
+            "Budoucnost ti přinese otázky, na které musíš sám najít odpovědi v hlubinách své duše.",
+            "V kristalech času vidím: tvá cesta není rovná, ale právě v zatáčkách se skrývá zlato.",
+            "Věštba zní: nikdy nebudeš tím, kdo býval. To není tragédie, to je dar.",
+            "V daleké budoucnosti si uvědomíš, že všechny překážky byly vlastně mostky.",
+            "Hvězdy prozrazují: ten, kdo se nebojí být sám, nikdy nebude sám.",
+            "Čeká tě doba, kdy pochopíš, že nejdůležitější věci nelze vidět ani kousat.",
+            "Věštím ti hlubokou pravdu: budoucnost není určena osudem, jen vytvářena tebou.",
+            "Příští kapitola bude napsána láskou a smrtelností, ne strachem.",
+            "Vidím v tě sílu, kterou sám neznáš. Čekej na správný čas.",
+            "Věštba šeptá: všechny hvězdy se jednou setkají v jednom bodě... tvém.",
+            "Budoucnost ti nabídne volbu mezi bezpečím a smyslem. Vyber si rozumně.",
+            "V čase, který přijde, budeš vděčný za to, co dnes musíš ztratit.",
+            "Věštím: tvůj osud a tvoje svoboda nejsou rozpory, jsou jeden tanec.",
+            "Halucinace v magické kouli ukazuje: ta verze tebe, kterou myslíš že jsi, je jen tín reality.",
+            "Budoucnost zní jako ticho, ale to ticho je plné života a vesmírného tikání.",
+            "Věštba mumlá: každý, kdo prošel tvou cestou, ti zanechal dar. Rozpoznáš jej.",
+            "Vidím dálku, kde se setkají tvoje sny a realita. Tam je tvůj pravý domov.",
+            "Věštím ti: nejsilnější věc v tebe není řeč, ale absence slov.",
+            "Příští tisíciletí přinese odpovědi na otázky, které si ani neuvědomuješ.",
+            "V budoucnosti uzříš, že bolest byla jen tvůj nejlepší učitel.",
+            "Věštba říká: ten, kdo se bojíš být, již máš v sobě schovaného.",
+            "Čeká tě dlouhá noc, ale hvězdy budou věrnější než kdy dříve.",
+            "Věštím: ztracené bude znovu nalezeno a nalezené bude ještě dražší.",
+            "Věštba šeptá: tvoje budoucnost je psaná neviditelným inkoustem lásky.",
+            "Budoucnost ti povídá, že pravý dar je v tom, co nikdy nedostaneš.",
+            "Věštba mumlá: všichni, které potkáš, jsou tvými učiteli. Poslouš je.",
+            "V čase, který přijde, bude každý den volbou - začít znova.",
+            "Věštím ti nejhluběji: ty jsi už doma, jen to ještě nevíš.",
+            "Budoucnost skrývá tajemství, které tě změní navždy.",
+            "Hvězdy říkají: všechno, co děláš dnes, tě učí, jak být zítřícího dne.",
+            "Věštba prozrazuje: tvůj osud čeká na tvé rozhodnutí, ne na náhodu."
+        ];
+
+        function getFortune() {
+            const fortuneElement = document.getElementById('fortune');
+            fortuneElement.classList.add('loading');
+            fortuneElement.textContent = '🐾 Věštiči se zamýšlí... 🐾';
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * fortunes.length);
+                fortuneElement.textContent = fortunes[randomIndex];
+                fortuneElement.classList.remove('loading');
+            }, 1500);
+        }
+
+        function resetFortune() {
+            document.getElementById('fortune').textContent = 
+                'Zmáčkni tlačítko a nechej kočku ti prozradit budoucnost...';
+            document.getElementById('fortune').classList.add('initial-text');
+        }
+
+        // Automatické ověřování věštby při prvním načtení
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                // Stránka je připravena
+            }, 100);
+        });
+    </script>
+</body>
+</html>

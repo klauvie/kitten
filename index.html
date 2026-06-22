@@ -295,26 +295,123 @@
     <script>
         // Seznam věcí, na které si kočka myslí
         const things = [
-            { word: "myš", category: "zvíře", similar: ["hlodavec", "potkan", "krysa"], hint: "💡 Máji dlouhý ocas a jsou malé..." },
-            { word: "pták", category: "zvíře", similar: ["peří", "křídla", "létat"], hint: "💡 Tvor se skořápkou na těle..." },
-            { word: "ryba", category: "zvíře", similar: ["voda", "ploutve", "šupiny"], hint: "💡 Bez něho se topíš..." },
-            { word: "slunce", category: "příroda", similar: ["hvězda", "teplo", "světlo"], hint: "💡 Největší balónek na obloze..." },
-            { word: "měsíc", category: "příroda", similar: ["hvězda", "noc", "svit"], hint: "💡 Změňuje se každý den, ale vždycky se vrací..." },
-            { word: "tráva", category: "příroda", similar: ["zelená", "zahrada", "louka"], hint: "💡 Kočka si v ní ráda hraje..." },
-            { word: "strom", category: "příroda", similar: ["dřevo", "listy", "les"], hint: "💡 Má vrstvy a po kterých se dá lézt..." },
-            { word: "voda", category: "příroda", similar: ["tekutina", "moře", "pití"], hint: "💡 Kočka ji nesnáší, ale bez ní nemůžeš..." },
-            { word: "oheň", category: "příroda", similar: ["teplý", "nebezpečný", "plameny"], hint: "💡 Svítí a kouská..." },
-            { word: "snění", category: "pojem", similar: ["představa", "fantasy", "noční"], hint: "💡 Vidiš věci, které nejsou pravdivé..." },
-            { word: "hraní", category: "činnost", similar: ["zábava", "hra", "veselí"], hint: "💡 Děláš to v parku bez cíle..." },
-            { word: "spaní", category: "činnost", similar: ["odpočinek", "postel", "noc"], hint: "💡 Oči se zavírají a čas letí..." },
-            { word: "jídlo", category: "věc", similar: ["jíst", "chutné", "hlad"], hint: "💡 Potřebuješ to, když slýcháš vaše břicho..." },
-            { word: "postel", category: "věc", similar: ["spaní", "pohodlí", "nábytek"], hint: "💡 Měkko, pohodlně, kde se cítíš bezpečně..." },
-            { word: "hračka", category: "věc", similar: ["hraní", "zábava", "hrát"], hint: "💡 Věc, kterou chceš, kterou ztratíš, kterou hledáš..." },
-            { word: "kniha", category: "věc", similar: ["čtení", "papír", "příběh"], hint: "💡 Přátel se skrývá v tenkých listech..." },
-            { word: "barva", category: "pojem", similar: ["zbarvit", "odstín", "spektrum"], hint: "💡 Všechno to má, někdo více, někdo méně..." },
-            { word: "zvuk", category: "pojem", similar: ["slyšet", "hluk", "hudba"], hint: "💡 Víc než vidíš, slyšíš..." },
-            { word: "láska", category: "pojem", similar: ["cítit", "srdce", "pocit"], hint: "💡 Nejsilnější věc, kterou necítíš rukama..." },
-            { word: "strach", category: "pojem", similar: ["nebezpečí", "obava", "hrůza"], hint: "💡 Cítíš to v hlubinách, když je tma..." }
+            { word: "myš", category: "zvíře", similar: ["hlodavec", "potkan", "krysa"], getHint: (input) => {
+                if (input === "zvíře" || input === "zvírata") return "Ano, je to zvíře! Ale mnohem menší...";
+                if (["hlodavec", "potkan", "krysa"].includes(input)) return "Správně! Je to v té rodině, ale přesněji...";
+                if (input.length >= 2) return "Máji dlouhý ocas a jsou malé...";
+                return "To s tím nemá moc společného...";
+            }},
+            { word: "pták", category: "zvíře", similar: ["peří", "křídla", "létat"], getHint: (input) => {
+                if (input === "zvíře" || input === "zvírata") return "Ano, je to zvíře! Ale s křídly...";
+                if (["peří", "křídla", "létat", "létá"].includes(input)) return "Správně! Ale to není samo, patří někomu...";
+                return "Tvor se skořápkou na těle...";
+            }},
+            { word: "ryba", category: "zvíře", similar: ["voda", "ploutve", "šupiny"], getHint: (input) => {
+                if (input === "zvíře" || input === "zvírata") return "Ano, zvíře! Ale bez nohou...";
+                if (["voda", "moře", "oceán"].includes(input)) return "Správně! Ale nejde pít ji...";
+                return "Bez něho se topíš...";
+            }},
+            { word: "slunce", category: "příroda", similar: ["hvězda", "teplo", "světlo"], getHint: (input) => {
+                if (input === "příroda") return "Přesně příroda! Ale neuklízíš ho...";
+                if (["hvězda", "hvězdy"].includes(input)) return "Ano! Ale horší a blíž...";
+                if (["teplo", "teplý", "horko"].includes(input)) return "Ano! Ale je to víc...";
+                return "Největší balónek na obloze...";
+            }},
+            { word: "měsíc", category: "příroda", similar: ["hvězda", "noc", "svit"], getHint: (input) => {
+                if (input === "příroda") return "Přesně! Ale nemůžeš ho koupit...";
+                if (["noc", "noční"].includes(input)) return "Ano! Ale není to čas...";
+                if (["hvězda", "hvězdy"].includes(input)) return "Blízko! Ale nejde jím navigovat...";
+                return "Změňuje se každý den, ale vždycky se vrací...";
+            }},
+            { word: "tráva", category: "příroda", similar: ["zelená", "zahrada", "louka"], getHint: (input) => {
+                if (input === "příroda") return "Správně příroda! Ale rostoucí...";
+                if (["zelená", "zelený"].includes(input)) return "Ano, zelená! Ale nejdeš si ji koupit jako oblečení...";
+                if (["zahrada", "louka", "park"].includes(input)) return "Blízko! Ale ne tím místem...";
+                return "Kočka si v ní ráda hraje...";
+            }},
+            { word: "strom", category: "příroda", similar: ["dřevo", "listy", "les"], getHint: (input) => {
+                if (input === "příroda") return "Správně příroda! Ale stojí na místě...";
+                if (["dřevo", "dřevěný"].includes(input)) return "Ano! Ale je to živé...";
+                if (["listy", "listí"].includes(input)) return "Správně! Ale nejde bez kmene...";
+                return "Má vrstvy a po kterých se dá lézt...";
+            }},
+            { word: "voda", category: "příroda", similar: ["tekutina", "moře", "pití"], getHint: (input) => {
+                if (input === "příroda") return "Přesně příroda! Ale můžeš ji vypit...";
+                if (["tekutina", "tekuté"].includes(input)) return "Ano! Ale je to pravé čisté...";
+                if (["moře", "oceán", "řeka"].includes(input)) return "Blízko! Ale to je větší místo s tím...";
+                return "Kočka ji nesnáší, ale bez ní nemůžeš...";
+            }},
+            { word: "oheň", category: "příroda", similar: ["teplý", "nebezpečný", "plameny"], getHint: (input) => {
+                if (input === "příroda") return "Správně! Ale neuklízíš ho do skříně...";
+                if (["teplý", "horký", "teplo"].includes(input)) return "Ano! Ale je to živé...";
+                if (["nebezpečný", "nebezpečí"].includes(input)) return "Správně! Ale není to zvíře...";
+                return "Svítí a kouská...";
+            }},
+            { word: "snění", category: "pojem", similar: ["představa", "fantasy", "noční"], getHint: (input) => {
+                if (input === "pojem") return "Správně! Ale není to fyzické...";
+                if (["představa", "fantasy", "imaginace"].includes(input)) return "Blízko! Ale to není to samé...";
+                if (["noc", "noční", "spánek"].includes(input)) return "Správně! Ale není to čas...";
+                return "Vidíš věci, které nejsou pravdivé...";
+            }},
+            { word: "hraní", category: "činnost", similar: ["zábava", "hra", "veselí"], getHint: (input) => {
+                if (input === "činnost") return "Správně činnost! Ale můžeš ji dělat sám...";
+                if (["zábava", "zábavné"].includes(input)) return "Ano, zábavné! Ale nejde se na něj dívat...";
+                if (["hra", "hra"].includes(input)) return "Blízko! Ale nejde se to koupit...";
+                return "Děláš to v parku bez cíle...";
+            }},
+            { word: "spaní", category: "činnost", similar: ["odpočinek", "postel", "noc"], getHint: (input) => {
+                if (input === "činnost") return "Přesně! Ale nejdeš do školy...";
+                if (["odpočinek", "odpočívat"].includes(input)) return "Ano! Ale v tom neslyšíš...";
+                if (["postel", "lůžko"].includes(input)) return "Správně! Ale není to místo...";
+                return "Oči se zavírají a čas letí...";
+            }},
+            { word: "jídlo", category: "věc", similar: ["jíst", "chutné", "hlad"], getHint: (input) => {
+                if (input === "věc") return "Správně věc! Ale nedrží dlouho...";
+                if (["jíst", "jídlo", "chutné"].includes(input)) return "Ano! Ale nemůžeš ji koupit na trhu jako taková...";
+                if (["hlad", "hladový"].includes(input)) return "Správně pocit! Ale není to fyzické...";
+                return "Potřebuješ to, když slýcháš vaše břicho...";
+            }},
+            { word: "postel", category: "věc", similar: ["spaní", "pohodlí", "nábytek"], getHint: (input) => {
+                if (input === "věc") return "Správně! Ale má nohy...";
+                if (["spaní", "spánek"].includes(input)) return "Ano! Ale to není činnost, která se jí dělá...";
+                if (["nábytek", "nábytková"].includes(input)) return "Správně! Ale konkrétněji...";
+                return "Měkko, pohodlně, kde se cítíš bezpečně...";
+            }},
+            { word: "hračka", category: "věc", similar: ["hraní", "zábava", "hrát"], getHint: (input) => {
+                if (input === "věc") return "Správně! Ale není to potřeba...";
+                if (["hraní", "hrát", "zábava"].includes(input)) return "Ano! Ale nejde se s ní jít nikam bez ní...";
+                return "Věc, kterou chceš, kterou ztratíš, kterou hledáš...";
+            }},
+            { word: "kniha", category: "věc", similar: ["čtení", "papír", "příběh"], getHint: (input) => {
+                if (input === "věc") return "Správně! Ale není to pro jídlo...";
+                if (["čtení", "číst"].includes(input)) return "Ano! Ale to není věc...";
+                if (["papír", "papírová"].includes(input)) return "Správně! Ale sroučí se to...";
+                return "Přátel se skrývá v tenkých listech...";
+            }},
+            { word: "barva", category: "pojem", similar: ["zbarvit", "odstín", "spektrum"], getHint: (input) => {
+                if (input === "pojem") return "Správně! Ale nemůžeš ji koupit jako věc...";
+                if (["zbarvit", "barvit"].includes(input)) return "Blízko! Ale to není to samé...";
+                if (["odstín", "spektrum"].includes(input)) return "Ano! Ale je to všude kolem...";
+                return "Všechno to má, někdo více, někdo méně...";
+            }},
+            { word: "zvuk", category: "pojem", similar: ["slyšet", "hluk", "hudba"], getHint: (input) => {
+                if (input === "pojem") return "Správně! Ale není to fyzické...";
+                if (["slyšet", "sluch"].includes(input)) return "Ano! Ale to není věc...";
+                if (["hluk", "hudba"].includes(input)) return "Blízko! Ale nejde to všude...";
+                return "Víc než vidíš, slyšíš...";
+            }},
+            { word: "láska", category: "pojem", similar: ["cítit", "srdce", "pocit"], getHint: (input) => {
+                if (input === "pojem") return "Správně! Ale není to fyzické...";
+                if (["cítit", "pocit", "srdce"].includes(input)) return "Blízko! Ale to není to samé...";
+                if (["srdce"].includes(input)) return "Ano! Ale srdce není věc...";
+                return "Nejsilnější věc, kterou necítíš rukama...";
+            }},
+            { word: "strach", category: "pojem", similar: ["nebezpečí", "obava", "hrůza"], getHint: (input) => {
+                if (input === "pojem") return "Správně! Ale není to radost...";
+                if (["nebezpečí", "nebezpečný"].includes(input)) return "Blízko! Ale to není to samé...";
+                if (["obava", "hrůza"].includes(input)) return "Ano! Ale je to temnejší...";
+                return "Cítíš to v hlubinách, když je tma...";
+            }}
         ];
 
         let currentThing = null;
@@ -389,8 +486,9 @@
                 return;
             }
 
-            // Špatně - zobraz nápovědu
-            fortuneElement.innerHTML = `❌ Ne, to není správně! Zkus znovu! 😸<br/><span style="font-size: 0.9em; color: #FF6633; margin-top: 10px; display: block;">${currentThing.hint}</span>`;
+            // Špatně - zobraz inteligentní nápovědu na základě vstupu
+            const hint = currentThing.getHint(input);
+            fortuneElement.innerHTML = `❌ Ne, to není správně! 😸<br/><span style="font-size: 0.9em; color: #FF6633; margin-top: 10px; display: block;">💡 ${hint}</span>`;
             document.getElementById('guessInput').value = '';
             document.getElementById('attempts').textContent = `Pokusů: ${attempts}`;
         }

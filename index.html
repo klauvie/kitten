@@ -295,26 +295,26 @@
     <script>
         // Seznam věcí, na které si kočka myslí
         const things = [
-            { word: "myš", category: "zvíře", similar: ["hlodavec", "potkan", "krysa"], hint: "💡 Kočka mě často lovi..." },
-            { word: "pták", category: "zvíře", similar: ["peří", "křídla", "létat"], hint: "💡 Létám a zpívám..." },
-            { word: "ryba", category: "zvíře", similar: ["voda", "ploutve", "šupiny"], hint: "💡 Bydlím ve vodě..." },
-            { word: "slunce", category: "příroda", similar: ["hvězda", "teplo", "světlo"], hint: "💡 Září na obloze v noci... ne, počkej, přes den!" },
-            { word: "měsíc", category: "příroda", similar: ["hvězda", "noc", "svit"], hint: "💡 Když kočky vyje na noc..." },
-            { word: "tráva", category: "příroda", similar: ["zelená", "zahrada", "louka"], hint: "💡 Rostě na zemi a je zelená..." },
-            { word: "strom", category: "příroda", similar: ["dřevo", "listy", "les"], hint: "💡 Mám kmen a listy... Kočka se na mě ráda leze!" },
-            { word: "voda", category: "příroda", similar: ["tekutina", "moře", "pití"], hint: "💡 Tekutá, čirá, všude kolem nás..." },
-            { word: "oheň", category: "příroda", similar: ["teplý", "nebezpečný", "plameny"], hint: "💡 Hřeješ a rozsvěcuješ, ale nesmíš se mě dotknout!" },
-            { word: "snění", category: "pojem", similar: ["představa", "fantasy", "noční"], hint: "💡 Mám to každou noc, když spím..." },
-            { word: "hraní", category: "činnost", similar: ["zábava", "hra", "veselí"], hint: "💡 Nejraději to dělám s přáteli..." },
-            { word: "spaní", category: "činnost", similar: ["odpočinek", "postel", "noc"], hint: "💡 Kočky to milují 16 hodin denně..." },
-            { word: "jídlo", category: "věc", similar: ["jíst", "chutné", "hlad"], hint: "💡 Bez toho bys neměl energii..." },
-            { word: "postel", category: "věc", similar: ["spaní", "pohodlí", "nábytek"], hint: "💡 Místo kde se spí... a odpočívá..." },
-            { word: "hračka", category: "věc", similar: ["hraní", "zábava", "hrát"], hint: "💡 S tím si dítko pohraje..." },
-            { word: "kniha", category: "věc", similar: ["čtení", "papír", "příběh"], hint: "💡 Má stránky plné slov a příběhů..." },
-            { word: "barva", category: "pojem", similar: ["zbarvit", "odstín", "spektrum"], hint: "💡 Červená, modrá, zelená... všechno kolem vidíš v..." },
-            { word: "zvuk", category: "pojem", similar: ["slyšet", "hluk", "hudba"], hint: "💡 Slyšíš mě přes uši..." },
-            { word: "láska", category: "pojem", similar: ["cítit", "srdce", "pocit"], hint: "💡 Cítíš ji v srdci, když se máš rád..." },
-            { word: "strach", category: "pojem", similar: ["nebezpečí", "obava", "hrůza"], hint: "💡 Cítíš to, když se bojíš..." }
+            { word: "myš", category: "zvíře", similar: ["hlodavec", "potkan", "krysa"], hint: "💡 Máji dlouhý ocas a jsou malé..." },
+            { word: "pták", category: "zvíře", similar: ["peří", "křídla", "létat"], hint: "💡 Tvor se skořápkou na těle..." },
+            { word: "ryba", category: "zvíře", similar: ["voda", "ploutve", "šupiny"], hint: "💡 Bez něho se topíš..." },
+            { word: "slunce", category: "příroda", similar: ["hvězda", "teplo", "světlo"], hint: "💡 Největší balónek na obloze..." },
+            { word: "měsíc", category: "příroda", similar: ["hvězda", "noc", "svit"], hint: "💡 Změňuje se každý den, ale vždycky se vrací..." },
+            { word: "tráva", category: "příroda", similar: ["zelená", "zahrada", "louka"], hint: "💡 Kočka si v ní ráda hraje..." },
+            { word: "strom", category: "příroda", similar: ["dřevo", "listy", "les"], hint: "💡 Má vrstvy a po kterých se dá lézt..." },
+            { word: "voda", category: "příroda", similar: ["tekutina", "moře", "pití"], hint: "💡 Kočka ji nesnáší, ale bez ní nemůžeš..." },
+            { word: "oheň", category: "příroda", similar: ["teplý", "nebezpečný", "plameny"], hint: "💡 Svítí a kouská..." },
+            { word: "snění", category: "pojem", similar: ["představa", "fantasy", "noční"], hint: "💡 Vidiš věci, které nejsou pravdivé..." },
+            { word: "hraní", category: "činnost", similar: ["zábava", "hra", "veselí"], hint: "💡 Děláš to v parku bez cíle..." },
+            { word: "spaní", category: "činnost", similar: ["odpočinek", "postel", "noc"], hint: "💡 Oči se zavírají a čas letí..." },
+            { word: "jídlo", category: "věc", similar: ["jíst", "chutné", "hlad"], hint: "💡 Potřebuješ to, když slýcháš vaše břicho..." },
+            { word: "postel", category: "věc", similar: ["spaní", "pohodlí", "nábytek"], hint: "💡 Měkko, pohodlně, kde se cítíš bezpečně..." },
+            { word: "hračka", category: "věc", similar: ["hraní", "zábava", "hrát"], hint: "💡 Věc, kterou chceš, kterou ztratíš, kterou hledáš..." },
+            { word: "kniha", category: "věc", similar: ["čtení", "papír", "příběh"], hint: "💡 Přátel se skrývá v tenkých listech..." },
+            { word: "barva", category: "pojem", similar: ["zbarvit", "odstín", "spektrum"], hint: "💡 Všechno to má, někdo více, někdo méně..." },
+            { word: "zvuk", category: "pojem", similar: ["slyšet", "hluk", "hudba"], hint: "💡 Víc než vidíš, slyšíš..." },
+            { word: "láska", category: "pojem", similar: ["cítit", "srdce", "pocit"], hint: "💡 Nejsilnější věc, kterou necítíš rukama..." },
+            { word: "strach", category: "pojem", similar: ["nebezpečí", "obava", "hrůza"], hint: "💡 Cítíš to v hlubinách, když je tma..." }
         ];
 
         let currentThing = null;
